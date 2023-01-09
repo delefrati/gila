@@ -1,5 +1,6 @@
 FROM php:7.4-cli
-# RUN docker-php-ext-install mysqli
+LABEL org.opencontainers.image.authors="jeandelefrati@gmail.com"
+
 RUN docker-php-ext-install pdo_mysql
 WORKDIR /opt/app/
 

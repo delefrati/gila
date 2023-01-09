@@ -1,4 +1,5 @@
 FROM mysql:5.7
+LABEL org.opencontainers.image.authors="jeandelefrati@gmail.com"
 
 ENV MYSQL_DATABASE 'gila'
 ENV MYSQL_USER 'gila'
