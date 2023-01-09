@@ -1,11 +1,9 @@
 <?php declare(strict_types=1);
-use SebastianBergmann\Type\VoidType;
 
 require_once('Db_base.php');
-use PHPUnit\Framework\TestCase;
 use Gila\model\User;
 
-final class User_test extends Db_base
+final class UserTest extends Db_base
 {
     private $user;
     public function setUp(): void {
@@ -52,7 +50,7 @@ final class User_test extends Db_base
         $id = $this->user->add(["name" => "Name", "email" => "user@domain.test", "phone_nr" => "+12345678"]);
         $this->assertSame(4, $id);
 
-        $id = $this->user->add(["other" => "missing", "name" => "Extra var", "email" => "user@domain.test", "phone_nr" => "+12345678"]);
+        $id = $this->user->add(["other" => "extra", "name" => "Extra var", "email" => "user@domain.test", "phone_nr" => "+12345678"]);
         $this->assertSame(5, $id);
 
         $id = $this->user->add(["name" => "Missing var", "email" => "user@domain.test"]);
@@ -73,14 +71,12 @@ final class User_test extends Db_base
     {
         $this->expectException(Exception::class);
         $total = $this->user->update(10, ["name" => "Missing", "email" => "user@domain.test", "phone_nr" => "+12345678"]);
-        $this->assertSame(1, $total);
     }
 
     public function testUpdate_error(): void
     {
         $this->expectException(PDOException::class);
         $total = $this->user->update(3, ["name" => "Missing"]);
-        $this->assertSame(1, $total);
     }
 
     public function testDelete_good(): void

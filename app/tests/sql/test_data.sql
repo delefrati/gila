@@ -35,6 +35,9 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `gila`.`category` (`name`) VALUES ('Sports');
+INSERT INTO `gila`.`category` (`name`) VALUES ('Finance');
+INSERT INTO `gila`.`category` (`name`) VALUES ('Movies');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
