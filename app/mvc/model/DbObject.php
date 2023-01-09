@@ -21,9 +21,9 @@ abstract class DbObject implements DbObjectInterface
 
     public function get(int $id) : array
     {
-        $sql = sprintf('SELECT * FROM %s WHERE id=?', $this->getObjName());
+        $sql = sprintf('SELECT * FROM %s WHERE id=:id', $this->getObjName());
         $stt = $this->db->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY]);
-        $stt->execute([$id]);
+        $stt->execute([':id'=>$id]);
 
         if (!$rs = $stt->fetch(\PDO::FETCH_ASSOC)) {
             return [];
@@ -33,51 +33,30 @@ abstract class DbObject implements DbObjectInterface
 
     public function add(array $obj_data) : int
     {
-        $id = 0;
-        try {
-            $this->db->beginTransaction();
-            $fields = $this->getFields();
-            $table = $this->getObjName();
-            $str_fields = '';
-            $str_questions = '';
-            $str_fields = join(', ', $fields);
-            $str_questions = trim(str_repeat('?, ', count($fields)), ', ');
-            $str = sprintf('INSERT INTO %s (%s) VALUES (%s)', $table, $str_fields, $str_questions);
-            $stmt = $this->db->prepare($str);
-            $data = $this->prepareData($obj_data);
-            $stmt->execute(array_values($data));
-            $id = $this->db->lastInsertId();
-            $this->db->commit();
-        } catch (Exception $e) {
-            // This will guarantee that we are not geting the wrong id and rethrow the error
-            throw $e;
-        }
-        return $id;
+        $fields = $this->getFields();
+        $table = $this->getObjName();
+        $str_fields = join(', ', $fields);
+        $str_values = ':' . join(', :', $fields);
+        $str = sprintf('INSERT INTO %s (%s) VALUES (%s)', $table, $str_fields, $str_values);
+        $data = $this->prepareData($obj_data);
+        return $this->exec($str, $data);
     }
 
-    public function update(int $id, array $obj_data) : int
+    public function update(int $id, array $data) : int
     {
-
         if (count($this->get($id)) < 1) {
             throw new Exception('Invalid id.');
         }
-        $this->db->beginTransaction();
         $table = $this->getObjName();
-
         $fields = $this->getFields();
-        $data = $this->prepareData($obj_data, false);
         $str = sprintf('UPDATE %s SET ', $table);
         foreach ($fields as $field) {
-            $str .= $field . '=?, ';
+            $str .= $field . '=:' . $field . ', ';
         }
         $str = trim($str, ', ');
-        $str .= ' WHERE id=?';
-
+        $str .= ' WHERE id=:id';
         $data['id'] = $id;
-        $stmt = $this->db->prepare($str);
-        $done = $stmt->execute(array_values($data));
-        $this->db->commit();
-        return $done;
+        return $this->exec($str, $data);
     }
 
     public function delete(int $id) : bool
@@ -86,25 +65,37 @@ abstract class DbObject implements DbObjectInterface
         if (count($this->get($id)) < 1) {
             return false;
         }
+        $str = sprintf('DELETE FROM %s WHERE id=:id', $table);
+        return $this->exec($str, ['id'=>$id], true);
+    }
 
-        $str = sprintf('DELETE FROM %s WHERE id=?', $table);
+    public function exec(string $str, array $data, bool $ignore_null = false)
+    {
+        $data = $this->prepareData($data, $ignore_null);
+
+        $this->db->beginTransaction();
         $stmt = $this->db->prepare($str);
-        return $stmt->execute([$id]);
+        $response = $stmt->execute($data);
+        $this->db->commit();
+        return $response;
     }
 
     /**
      * This method will clear data that is wrong (too much or too little data)
      */
-    private function prepareData(array $obj_data, bool $ignore_null = false) : array
+    private function prepareData(array $data, bool $ignore_null = false) : array
     {
         $prepared = [];
         $fields = $this->getFields();
         foreach ($fields as $field) {
-            if (key_exists($field, $obj_data)) {
-                $prepared[$field] = $obj_data[$field];
+            if (key_exists($field, $data)) {
+                $prepared[$field] = $data[$field];
             } elseif (!$ignore_null) {
                 $prepared[$field] = null;
             }
+        }
+        if (key_exists('id', $data)) {
+            $prepared['id'] = $data['id'];
         }
         return $prepared;
     }

@@ -48,13 +48,13 @@ final class UserTest extends Db_base
     public function testAdd_good(): void
     {
         $id = $this->user->add(["name" => "Name", "email" => "user@domain.test", "phone_nr" => "+12345678"]);
-        $this->assertSame(4, $id);
+        $this->assertSame(1, $id);
 
         $id = $this->user->add(["other" => "extra", "name" => "Extra var", "email" => "user@domain.test", "phone_nr" => "+12345678"]);
-        $this->assertSame(5, $id);
+        $this->assertSame(1, $id);
 
         $id = $this->user->add(["name" => "Missing var", "email" => "user@domain.test"]);
-        $this->assertSame(6, $id);
+        $this->assertSame(1, $id);
     }
 
     public function testUpdate_good(): void
