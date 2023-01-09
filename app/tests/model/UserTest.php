@@ -47,10 +47,52 @@ final class User_test extends Db_base
         $this->assertEquals($this->user->getAll(), $expected);
     }
 
-    public function testAdd_good(): void 
+    public function testAdd_good(): void
     {
         $id = $this->user->add(["name" => "Name", "email" => "user@domain.test", "phone_nr" => "+12345678"]);
-        $this->assertGreaterThan(0, $id);
+        $this->assertSame(4, $id);
+
+        $id = $this->user->add(["other" => "missing", "name" => "Extra var", "email" => "user@domain.test", "phone_nr" => "+12345678"]);
+        $this->assertSame(5, $id);
+
+        $id = $this->user->add(["name" => "Missing var", "email" => "user@domain.test"]);
+        $this->assertSame(6, $id);
+    }
+
+    public function testUpdate_good(): void
+    {
+        $total = $this->user->update(1, ["name" => "Name", "email" => "user@domain.test", "phone_nr" => "+12345678"]);
+        $this->assertSame(1, $total);
+        $total = $this->user->update(2, ["extra"=> "value", "name" => "Name", "email" => "user@domain.test", "phone_nr" => "+12345678"]);
+        $this->assertSame(1, $total);
+        $total = $this->user->update(3, ["name" => "Missing", "email" => "user@domain.test"]);
+        $this->assertSame(1, $total);
+    }
+
+    public function testUpdate_bad(): void
+    {
+        $this->expectException(Exception::class);
+        $total = $this->user->update(10, ["name" => "Missing", "email" => "user@domain.test", "phone_nr" => "+12345678"]);
+        $this->assertSame(1, $total);
+    }
+
+    public function testUpdate_error(): void
+    {
+        $this->expectException(PDOException::class);
+        $total = $this->user->update(3, ["name" => "Missing"]);
+        $this->assertSame(1, $total);
+    }
+
+    public function testDelete_good(): void
+    {
+        $deleted = $this->user->delete(1);
+        $this->assertTrue($deleted);
+    }
+
+    public function testDelete_bad(): void
+    {
+        $deleted = $this->user->delete(10);
+        $this->assertFalse($deleted);
     }
 
 }

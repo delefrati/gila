@@ -24,7 +24,7 @@ abstract class DbObject implements DbObjectInterface
         $sql = sprintf('SELECT * FROM %s WHERE id=?', $this->getObjName());
         $stt = $this->db->prepare($sql, [\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY]);
         $stt->execute([$id]);
-        
+
         if (!$rs = $stt->fetch(\PDO::FETCH_ASSOC)) {
             return [];
         }
@@ -55,14 +55,56 @@ abstract class DbObject implements DbObjectInterface
         return $id;
     }
 
+    public function update(int $id, array $obj_data) : int
+    {
+
+        if (count($this->get($id)) < 1) {
+            throw new Exception('Invalid id.');
+        }
+        $this->db->beginTransaction();
+        $table = $this->getObjName();
+
+        $fields = $this->getFields();
+        $data = $this->prepareData($obj_data, false);
+        $str = sprintf('UPDATE %s SET ', $table);
+        foreach ($fields as $field) {
+            $str .= $field . '=?, ';
+        }
+        $str = trim($str, ', ');
+        $str .= ' WHERE id=?';
+
+        $data['id'] = $id;
+        $stmt = $this->db->prepare($str);
+        $done = $stmt->execute(array_values($data));
+        $this->db->commit();
+        return $done;
+    }
+
+    public function delete(int $id) : bool
+    {
+        $table = $this->getObjName();
+        if (count($this->get($id)) < 1) {
+            return false;
+        }
+
+        $str = sprintf('DELETE FROM %s WHERE id=?', $table);
+        $stmt = $this->db->prepare($str);
+        return $stmt->execute([$id]);
+    }
+
     /**
      * This method will clear data that is wrong (too much or too little data)
      */
-    private function prepareData(array $obj_data) : array
+    private function prepareData(array $obj_data, bool $ignore_null = false) : array
     {
         $prepared = [];
-        foreach ($this->getFields() as $field) {
-            $prepared[$field] = $obj_data[$field] ?? null;
+        $fields = $this->getFields();
+        foreach ($fields as $field) {
+            if (key_exists($field, $obj_data)) {
+                $prepared[$field] = $obj_data[$field];
+            } elseif (!$ignore_null) {
+                $prepared[$field] = null;
+            }
         }
         return $prepared;
     }
