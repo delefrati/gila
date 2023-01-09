@@ -1,8 +1,6 @@
 <?php
 
 namespace Gila\model;
-use DbObject;
-use Gila\interfaces\DbObjectInterface;
 
 class User extends \Gila\model\DbObject
 {

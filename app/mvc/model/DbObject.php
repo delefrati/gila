@@ -35,22 +35,36 @@ abstract class DbObject implements DbObjectInterface
     {
         $id = 0;
         try {
-            // $this->db->beginTransaction();
-            // $id = $this->db->lastInsertId();
+            $this->db->beginTransaction();
             $fields = $this->getFields();
             $table = $this->getObjName();
             $str_fields = '';
             $str_questions = '';
             $str_fields = join(', ', $fields);
-            $str_questions = str_repeat('?, ', count($fields));
+            $str_questions = trim(str_repeat('?, ', count($fields)), ', ');
             $str = sprintf('INSERT INTO %s (%s) VALUES (%s)', $table, $str_fields, $str_questions);
-            print_r($str);
-            // $this->db->commit();
+            $stmt = $this->db->prepare($str);
+            $data = $this->prepareData($obj_data);
+            $stmt->execute(array_values($data));
+            $id = $this->db->lastInsertId();
+            $this->db->commit();
         } catch (Exception $e) {
             // This will guarantee that we are not geting the wrong id and rethrow the error
             throw $e;
         }
         return $id;
+    }
+
+    /**
+     * This method will clear data that is wrong (too much or too little data)
+     */
+    private function prepareData(array $obj_data) : array
+    {
+        $prepared = [];
+        foreach ($this->getFields() as $field) {
+            $prepared[$field] = $obj_data[$field] ?? null;
+        }
+        return $prepared;
     }
 
     public function save() : bool
