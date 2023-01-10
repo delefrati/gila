@@ -1,7 +1,7 @@
 <?php
 
 namespace Gila\controller\api;
-use Gila\model\Notification;
+use Gila\model\UserNotification;
 use Gila\model\Db;
 
 class NotificationController extends \Gila\controller\ControllerBase
@@ -10,7 +10,7 @@ class NotificationController extends \Gila\controller\ControllerBase
 
     public function __construct(Db $db)
     {
-        $this->notification = new Notification($db);
+        $this->notification = new UserNotification($db);
     }
     public function getAll() : void
     {
