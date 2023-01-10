@@ -35,9 +35,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `gila`.`category` (`name`) VALUES ('Sports');
-INSERT INTO `gila`.`category` (`name`) VALUES ('Finance');
-INSERT INTO `gila`.`category` (`name`) VALUES ('Movies');
+INSERT INTO `category` VALUES (1,'Sports'),(2,'Finance'),(3,'Movies');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,14 +70,17 @@ DROP TABLE IF EXISTS `notification`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notification` (
-  `category` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
-  `type` int(11) NOT NULL,
-  PRIMARY KEY (`category`,`user`,`type`),
+  `category` int(11) NOT NULL,
+  `by_sms` tinyint(4) DEFAULT NULL,
+  `by_email` tinyint(4) DEFAULT NULL,
+  `by_notification` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `fk_id_user_notification_idx` (`user`),
-  KEY `fk_id_notification_type_notification_idx` (`type`),
+  KEY `fk_id_notification_type_notification_idx` (`by_email`),
+  KEY `fk_id_category_notification` (`category`),
   CONSTRAINT `fk_id_category_notification` FOREIGN KEY (`category`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_id_notification_type_notification` FOREIGN KEY (`type`) REFERENCES `notification_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_id_user_notification` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -90,30 +91,8 @@ CREATE TABLE `notification` (
 
 LOCK TABLES `notification` WRITE;
 /*!40000 ALTER TABLE `notification` DISABLE KEYS */;
+INSERT INTO `notification` VALUES (1,1,1,1,NULL,NULL),(2,1,2,1,1,NULL),(3,1,3,1,1,1),(4,2,2,NULL,1,NULL),(5,2,3,NULL,NULL,1);
 /*!40000 ALTER TABLE `notification` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `notification_type`
---
-
-DROP TABLE IF EXISTS `notification_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `notification_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `notification_type`
---
-
-LOCK TABLES `notification_type` WRITE;
-/*!40000 ALTER TABLE `notification_type` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notification_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -151,4 +130,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-09  2:42:39
+-- Dump completed on 2023-01-10  0:32:57

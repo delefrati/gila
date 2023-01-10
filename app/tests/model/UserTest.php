@@ -6,6 +6,8 @@ use Gila\model\User;
 final class UserTest extends Db_base
 {
     private $user;
+
+
     public function setUp(): void {
         $db = $this->mockDb();
         $this->user = new User($db);
@@ -76,7 +78,7 @@ final class UserTest extends Db_base
     public function testUpdate_error(): void
     {
         $this->expectException(PDOException::class);
-        $total = $this->user->update(3, ["name" => "Missing"]);
+        $total = $this->user->update(3, ["none" => "Missing"]);
     }
 
     public function testDelete_good(): void

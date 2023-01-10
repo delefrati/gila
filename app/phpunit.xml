@@ -2,7 +2,14 @@
     colors="true"
     processIsolation="false"
     stopOnFailure="false"
+    bootstrap="tests/bootstrap.php"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <php>
+      <var name="DB_HOST" value="host.docker.internal" />
+      <var name="DB_USER" value="gila" />
+      <var name="DB_PASSWORD" value="test_db_password" />
+      <var name="DB_DATABASE" value="gila" />
+  </php>
   <coverage processUncoveredFiles="true">
     <include>
       <directory suffix=".php">./app</directory>
@@ -11,6 +18,8 @@
   <testsuites>
     <testsuite name="model">
       <file>tests/model/UserTest.php</file>
+      <file>tests/model/CategoryTest.php</file>
+      <file>tests/model/NotificationTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>

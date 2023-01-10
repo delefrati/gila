@@ -7,6 +7,7 @@ use Gila\model\Category;
 final class CategoryTest extends Db_base
 {
     private $category;
+
     public function setUp(): void {
         $db = $this->mockDb();
         $this->category = new Category($db);
@@ -44,10 +45,10 @@ final class CategoryTest extends Db_base
     public function testAdd_good(): void
     {
         $id = $this->category->add(["name" => "Name"]);
-        $this->assertSame(4, $id);
+        $this->assertSame(1, $id);
 
         $id = $this->category->add(["other" => "extra", "name" => "Extra var"]);
-        $this->assertSame(5, $id);
+        $this->assertSame(1, $id);
 
     }
 

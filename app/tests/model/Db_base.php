@@ -8,23 +8,12 @@ abstract class Db_base extends TestCase
 {
     protected $db;
 
-    static public function setUpBeforeClass() : void
-    {
-        self::resetDatabase();
-        parent::setUpBeforeClass();
-    }
     protected function mockDb() : Db
     {
-        $dsn = sprintf('mysql:host=%s;dbname=%s', $_ENV['DB_HOST'], $_ENV['DB_DATABASE']);
-        $db = new Db($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+        $dsn = sprintf('mysql:host=%s;dbname=%s', $GLOBALS['DB_HOST'], $GLOBALS['DB_DATABASE']);
+        $db = new Db($dsn, $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWORD']);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $db;
-    }
-
-    static public function resetDatabase() : void 
-    {
-        $command = sprintf('mariadb -h %s -u %s -p%s %s < /opt/app/tests/sql/test_data.sql', $_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $_ENV['DB_DATABASE']);
-        shell_exec($command);
     }
 
 }

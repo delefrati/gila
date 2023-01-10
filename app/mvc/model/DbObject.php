@@ -51,12 +51,14 @@ abstract class DbObject implements DbObjectInterface
         $fields = $this->getFields();
         $str = sprintf('UPDATE %s SET ', $table);
         foreach ($fields as $field) {
-            $str .= $field . '=:' . $field . ', ';
+            if (key_exists($field, $data)) {
+                $str .= $field . '=:' . $field . ', ';
+            }
         }
         $str = trim($str, ', ');
         $str .= ' WHERE id=:id';
         $data['id'] = $id;
-        return $this->exec($str, $data);
+        return $this->exec($str, $data, true);
     }
 
     public function delete(int $id) : bool
@@ -72,7 +74,6 @@ abstract class DbObject implements DbObjectInterface
     public function exec(string $str, array $data, bool $ignore_null = false)
     {
         $data = $this->prepareData($data, $ignore_null);
-
         $this->db->beginTransaction();
         $stmt = $this->db->prepare($str);
         $response = $stmt->execute($data);
