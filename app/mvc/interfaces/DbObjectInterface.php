@@ -2,7 +2,7 @@
 
 namespace Gila\interfaces;
 
-interface DbObjectInterface 
+interface DbObjectInterface
 {
     public function getObjName(): string;
     public function getFields(): array;

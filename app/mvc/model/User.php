@@ -2,7 +2,7 @@
 
 namespace Gila\model;
 
-class User extends \Gila\model\DbObject
+class User extends \Gila\model\DbObjectEditable
 {
 	/**
 	 * @return string

@@ -2,7 +2,7 @@
 
 namespace Gila\model;
 
-class Notification extends \Gila\model\DbObject
+class Notification extends \Gila\model\DbObjectEditable
 {
 	/**
 	 * @return string

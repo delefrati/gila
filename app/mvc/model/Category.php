@@ -2,7 +2,7 @@
 
 namespace Gila\model;
 
-class Category extends \Gila\model\DbObject
+class Category extends \Gila\model\DbObjectEditable
 {
 	/**
 	 * @return string

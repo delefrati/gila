@@ -7,20 +7,19 @@ final class UserTest extends Db_base
 {
     private $user;
 
-
     public function setUp(): void {
         $db = $this->mockDb();
         $this->user = new User($db);
     }
     public function testGet_bad(): void
     {
-        $this->assertEquals($this->user->get(0), []);
+        $this->assertEquals([], $this->user->get(0));
     }
 
     public function testGet_good(): void
     {
         $expected = ["id"=>1, "name"=>"Lorem", "email"=>"lorem@lipsum.com", "phone_nr"=>"+551234567"];
-        $this->assertEquals($this->user->get(1), $expected);
+        $this->assertEquals($expected, $this->user->get(1));
     }
     public function testGetAll_good(): void
     {
@@ -44,7 +43,7 @@ final class UserTest extends Db_base
                 'phone_nr' => '+2121212',
             ]
         ];
-        $this->assertEquals($this->user->getAll(), $expected);
+        $this->assertEquals($expected, $this->user->getAll());
     }
 
     public function testAdd_good(): void
