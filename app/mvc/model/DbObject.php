@@ -15,9 +15,9 @@ abstract class DbObject implements DbObjectInterface
         $this->db = $db;
     }
 
-    public function getAll() : array
+    public function getAll(array $fields = []) : array
     {
-        return $this->search([]);
+        return $this->search([], $fields);
     }
 
     public function get(int $id) : array
@@ -36,10 +36,14 @@ abstract class DbObject implements DbObjectInterface
         }
         return [];
     }
-    public function search(array $conditions=[], int $limit = null) : array
+    public function search(array $conditions=[], array $fields=[], int $limit = null) : array
     {
         $conditions = $this->prepareData($conditions, true);
         $str_where = '';
+        $str_fields = '*';
+        if (count($fields) > 0) {
+            $str_fields = join(',', $fields);
+        }
         $values = [];
         foreach($conditions as $condition => $value) {
             $conjugation = 'AND';
@@ -57,7 +61,7 @@ abstract class DbObject implements DbObjectInterface
         if ($limit !== null) {
             $str_limit = sprintf(' LIMIT %d', $limit);
         }
-        $str = sprintf('SELECT * FROM %s WHERE 1=1%s%s', $this->getTables(), $str_where, $str_limit);
+        $str = sprintf('SELECT %s FROM %s WHERE 1=1%s%s', $str_fields, $this->getTables(), $str_where, $str_limit);
 
         $stt = $this->db->prepare($str, [\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY]);
         $stt->execute($values);
