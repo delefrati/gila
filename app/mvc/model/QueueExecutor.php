@@ -50,7 +50,7 @@ class QueueExecutor {
             $sent = $this->sendEmail($email, $message);
         }
         if ($sent) {
-            $this->log(sprintf('Message sent via {%s} for {%s} - Category: {%s} ', $type, $name, $category));
+            $this->log(sprintf('Message sent via {%s} for {%s} - Category: {%s}', $type, $name, $category));
         }
         return ($sent > 0);
     }

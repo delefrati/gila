@@ -13,36 +13,36 @@ $router->setBasePath('/');
 $router->get(
     '/api/user',
     function () use ($db){
-        $user_controller = new \Gila\controller\api\UserController($db);
-        $user_controller->getAll();
+        $controller = new \Gila\controller\api\UserController($db);
+        $controller->getAll();
     }
 );
 $router->get(
     '/api/user/(\d+)',
     function ($id) use ($db) {
-        $user_controller = new \Gila\controller\api\UserController($db);
-        $user_controller->get($id);
+        $controller = new \Gila\controller\api\UserController($db);
+        $controller->get($id);
     }
 );
 $router->get(
     '/api/notification',
     function () use ($db) {
-        $notification_controller = new \Gila\controller\api\NotificationController($db);
-        $notification_controller->getAll();
+        $controller = new \Gila\controller\api\NotificationController($db);
+        $controller->getAll();
     }
 );
 $router->get(
     '/api/notification/(\d+)',
     function ($id) use ($db) {
-        $notification_controller = new \Gila\controller\api\NotificationController($db);
-        $notification_controller->get($id);
+        $controller = new \Gila\controller\api\NotificationController($db);
+        $controller->get($id);
     }
 );
 $router->get(
-    '/notification/',
+    '/subscription/',
     function () use ($db) {
-        $notification_controller = new \Gila\controller\NotificationController($db);
-        $notification_controller->get();
+        $controller = new \Gila\controller\api\SubscriptionController($db);
+        $controller->getData();
     }
 );
 

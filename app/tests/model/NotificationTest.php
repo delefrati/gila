@@ -125,7 +125,9 @@ final class NotificationTest extends Db_base
 
     public function testDelete_bad(): void
     {
-        $deleted = $this->notification->delete(1);
+        $deleted = $this->notification->delete(2);
+        $this->assertTrue($deleted);
+        $deleted = $this->notification->delete(2);
         $this->assertFalse($deleted);
     }
 

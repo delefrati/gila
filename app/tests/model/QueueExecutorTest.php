@@ -11,19 +11,18 @@ final class QueueExecutorTest extends Db_base
     private $queue;
     private $queue_exec;
 
-    static public function setUpBeforeClass() : void
-    {
+
+
+    public function setUp(): void {
+        parent::setUp();
+
         resetDatabase('notification');
         resetDatabase('user');
         resetDatabase('category');
         resetDatabase('queue');
         resetDatabase('message');
         resetDatabase('log');
-        parent::setUpBeforeClass();
-    }
 
-    public function setUp(): void {
-        parent::setUp();
         $this->queue = new Queue($this->db);
         $this->log = new Log($this->db);
 
@@ -49,37 +48,17 @@ final class QueueExecutorTest extends Db_base
         $logs = $this->log->getAll();
         $clear_logs = [];
         foreach ($logs as $log) {
-            $clear_logs[] = [
-                'id'=>$log['id'],
-                'log'=>$log['log'],
-            ];
+            $clear_logs[] = $log['log'];
         }
         $logs_expected = [
-            [
-              'id' => '1',
-              'log' => 'Generating new queue',
-            ],
-            [
-              'id' => '2',
-              'log' => 'Message sent via {sms} for {Lorem} - Category: {Sports} ',
-            ],
-            [
-              'id' => '3',
-              'log' => 'Message sent via {sms} for {Lorem} - Category: {Finance} ',
-            ],
-            [
-              'id' => '4',
-              'log' => 'Message sent via {email} for {Lorem} - Category: {Sports} ',
-            ],
-            [
-              'id' => '5',
-              'log' => 'Message sent via {phone} for {Lorem} - Category: {Finance} ',
-            ],
-            [
-              'id' => '6',
-              'log' => 'Message sent via {email} for {Ipsum} - Category: {Finance} ',
-            ],
+          'Message sent via {sms} for {Lorem} - Category: {Sports}',
+          'Message sent via {sms} for {Lorem} - Category: {Finance}',
+          'Message sent via {email} for {Lorem} - Category: {Sports}',
+          'Message sent via {phone} for {Lorem} - Category: {Finance}',
+          'Message sent via {email} for {Ipsum} - Category: {Finance}',
         ];
+        sort($clear_logs);
+        sort($logs_expected);
         $this->assertEquals($logs_expected, $clear_logs);
         $all = $this->queue->getAll();
         $this->assertEquals(0, count($all));

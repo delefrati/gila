@@ -69,7 +69,7 @@ final class UserNotificationTest extends Db_base
                 "type" => "phone",
             ],
         ];
-        $this->assertEquals($expected, $this->user->search(['user.id'=>1], $this->joins["left"]));
+        $this->assertEquals($expected, $this->user->search(['user.id'=>1], [], $this->joins["left"]));
     }
 
     public function testGetAll_good(): void
