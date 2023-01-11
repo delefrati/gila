@@ -13,6 +13,7 @@ final class QueueExecutorTest extends Db_base
 
     static public function setUpBeforeClass() : void
     {
+        resetDatabase('notification');
         resetDatabase('user');
         resetDatabase('category');
         resetDatabase('queue');

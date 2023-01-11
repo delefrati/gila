@@ -4,6 +4,7 @@ namespace Gila\controller\api;
 use Gila\model\Notification;
 use Gila\model\User;
 use Gila\model\Db;
+use Gila\model\UserNotification;
 
 class UserController extends \Gila\controller\ControllerBase
 {
@@ -11,7 +12,7 @@ class UserController extends \Gila\controller\ControllerBase
 
     public function __construct(Db $db)
     {
-        $this->user = new User($db);
+        $this->user = new UserNotification($db);
     }
     public function getAll() : void
     {
@@ -19,14 +20,8 @@ class UserController extends \Gila\controller\ControllerBase
     }
     public function get($id) : void
     {
-        $user = $this->user->get($id);
+        $user = $this->user->search(["user.id"=>$id]);
         print json_encode($user);
-    }
-
-    private function getNotifications($id) : array
-    {
-        $notification = new Notification($this->db);
-        $notification->search(['user'=>$id]);
     }
 
 }

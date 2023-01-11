@@ -16,6 +16,6 @@ class Notification extends \Gila\model\DbObjectEditable
 	 */
 	public function getFields(): array
 	{
-        return ["user", "category", "type", "status"];
+        return ["user", "category", "type", "qstatus"];
 	}
 }

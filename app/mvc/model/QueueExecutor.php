@@ -21,7 +21,7 @@ class QueueExecutor {
     {
         $total_executed = 0;
         for ($i=0; $i<=$limit; $i++) {
-            $rs = $this->queue->getFirst(['status'=>'WAIT']);
+            $rs = $this->queue->getFirst(['qstatus'=>'WAIT']);
             if (!is_array($rs) || count($rs) <= 0) {
                 break;
             }
@@ -30,7 +30,7 @@ class QueueExecutor {
                 $this->queue->delete($id);
                 $total_executed++;
             } else {
-                $this->queue->update($id, ['status' => 'ERROR']);
+                $this->queue->update($id, ['qstatus' => 'ERROR']);
             }
 
         }

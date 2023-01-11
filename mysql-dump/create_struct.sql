@@ -73,7 +73,6 @@ CREATE TABLE IF NOT EXISTS `notification` (
   `user` int(11) NOT NULL,
   `category` int(11) NOT NULL,
   `type` varchar(45) NOT NULL,
-  `status` varchar(45) NOT NULL DEFAULT 'WAIT',
   PRIMARY KEY (`id`),
   KEY `fk_id_user_notification_idx` (`user`),
   KEY `fk_id_category_notification` (`category`),
@@ -112,6 +111,7 @@ CREATE TABLE IF NOT EXISTS `queue` (
   `template` text,
   `notification_type` varchar(45) NOT NULL,
   `date_queued` datetime DEFAULT NULL,
+  `qstatus` varchar(45) NOT NULL DEFAULT 'WAIT',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -146,8 +146,8 @@ DELIMITER ;;
 CREATE DEFINER=`gila`@`%` PROCEDURE `sp_fill_queue`()
 BEGIN
 TRUNCATE TABLE queue;
-INSERT INTO queue (name, email, phone_nr, category, notification_type, template, date_queued)
-SELECT user.name, user.email, user.phone_nr, category.name, notification.type, message.template, NOW() FROM (
+INSERT INTO queue (name, email, phone_nr, category, notification_type, template, date_queued, qstatus)
+SELECT user.name, user.email, user.phone_nr, category.name, notification.type, message.template, NOW(), 'WAIT' FROM (
   user INNER JOIN (
     notification INNER JOIN (
       category

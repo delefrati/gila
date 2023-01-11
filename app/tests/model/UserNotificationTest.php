@@ -31,7 +31,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "1",
                 "category" => "1",
                 "type" => "sms",
-                "status" => 'WAIT',
             ],
             [
                 'id' => '2',
@@ -41,7 +40,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "1",
                 "category" => "2",
                 "type" => "sms",
-                "status" => 'WAIT',
             ],
             [
                 'id' => '3',
@@ -51,7 +49,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "1",
                 "category" => "3",
                 "type" => "phone",
-                "status" => 'WAIT',
             ],
             [
                 'id' => '7',
@@ -61,7 +58,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "1",
                 "category" => "1",
                 "type" => "email",
-                "status" => 'WAIT',
             ],
             [
                 'id' => '8',
@@ -71,7 +67,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "1",
                 "category" => "2",
                 "type" => "phone",
-                "status" => 'WAIT',
             ],
         ];
         $this->assertEquals($expected, $this->user->search(['user.id'=>1], $this->joins["left"]));
@@ -89,7 +84,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "1",
                 "category" => "1",
                 "type" => "sms",
-                "status" => 'WAIT',
             ],
             [
                 'id' => '2',
@@ -99,7 +93,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "1",
                 "category" => "2",
                 "type" => "sms",
-                "status" => 'WAIT',
             ],
             [
                 'id' => '3',
@@ -109,7 +102,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "1",
                 "category" => "3",
                 "type" => "phone",
-                "status" => 'WAIT',
             ],
             [
                 'id' => '4',
@@ -119,7 +111,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "2",
                 "category" => "2",
                 "type" => "email",
-                "status" => 'WAIT',
             ],
             [
                 'id' => '5',
@@ -129,7 +120,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "2",
                 "category" => "3",
                 "type" => "sms",
-                "status" => 'WAIT',
             ],
             [
                 'id' => '7',
@@ -139,7 +129,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "1",
                 "category" => "1",
                 "type" => "email",
-                "status" => 'WAIT',
             ],
             [
                 'id' => '8',
@@ -149,7 +138,6 @@ final class UserNotificationTest extends Db_base
                 "user" => "1",
                 "category" => "2",
                 "type" => "phone",
-                "status" => 'WAIT',
             ],
         ];
         $this->assertEquals($expected, $this->user->getAll());

@@ -31,7 +31,8 @@ final class QueueTest extends Db_base
             "category" => "Sports",
             "template" => "This is a message for Sports.",
             "notification_type" => "sms",
-            "date_queued" => date("Y-m-d") . " 00:00:00"
+            "date_queued" => date("Y-m-d") . " 00:00:00",
+            "qstatus" => "WAIT",
         ];
 
         $this->assertEquals($expected, $this->queue->get(1));
@@ -47,7 +48,8 @@ final class QueueTest extends Db_base
                 "category" => "Sports",
                 "template" => "This is a message for Sports.",
                 "notification_type" => "sms",
-                "date_queued" => date("Y-m-d") . " 00:00:00"
+                "date_queued" => date("Y-m-d") . " 00:00:00",
+                "qstatus" => "WAIT",
             ],
             [
                 "id" => "2",
@@ -57,7 +59,8 @@ final class QueueTest extends Db_base
                 "category" => "Finance",
                 "template" => "This is a message for Finance.",
                 "notification_type" => "sms",
-                "date_queued" => date("Y-m-d") . " 00:00:00"
+                "date_queued" => date("Y-m-d") . " 00:00:00",
+                "qstatus" => "WAIT",
             ],
             [
                 "id" => "3",
@@ -67,7 +70,8 @@ final class QueueTest extends Db_base
                 "category" => "Sports",
                 "template" => "This is a message for Sports.",
                 "notification_type" => "email",
-                "date_queued" => date("Y-m-d") . " 00:00:00"
+                "date_queued" => date("Y-m-d") . " 00:00:00",
+                "qstatus" => "WAIT",
             ],
             [
                 "id" => "4",
@@ -77,7 +81,8 @@ final class QueueTest extends Db_base
                 "category" => "Finance",
                 "template" => "This is a message for Finance.",
                 "notification_type" => "phone",
-                "date_queued" => date("Y-m-d") . " 00:00:00"
+                "date_queued" => date("Y-m-d") . " 00:00:00",
+                "qstatus" => "WAIT",
             ],
             [
                 "id" => "5",
@@ -87,7 +92,8 @@ final class QueueTest extends Db_base
                 "category" => "Finance",
                 "template" => "This is a message for Finance.",
                 "notification_type" => "email",
-                "date_queued" => date("Y-m-d") . " 00:00:00"
+                "date_queued" => date("Y-m-d") . " 00:00:00",
+                "qstatus" => "WAIT",
             ]
         ];
         $this->assertEquals($expected, $this->queue->getAll());

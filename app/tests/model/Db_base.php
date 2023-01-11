@@ -10,7 +10,6 @@ abstract class Db_base extends TestCase
 
     static public function setUpBeforeClass() : void
     {
-        // resetDatabase('fixture_data');
         parent::setUpBeforeClass();
     }
 
@@ -23,6 +22,7 @@ abstract class Db_base extends TestCase
 
     public function tearDown() : void
     {
+        $this->db = null;
         unset($this->db);
     }
 
