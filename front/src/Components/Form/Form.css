@@ -1,10 +1,21 @@
-.form{
+.form {
     text-align: center;
 }
 
-.form select{
+.form select {
     width: 271px;
     padding: 8px;
     font-size: 16px;
     margin: 10px;
+}
+
+.form button {
+    padding: 8px;
+    margin: 10px;
+    font-size: 16px;
+}
+
+.form label {
+    display: inline-block;
+    width: 100%;
 }

@@ -2,6 +2,7 @@
 use Gila\model\Db;
 
 require __DIR__ . '/vendor/autoload.php';
+header("Access-Control-Allow-Origin: *");
 
 // Create Router instance
 $router = new \Bramus\Router\Router();
