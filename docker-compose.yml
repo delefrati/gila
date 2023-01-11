@@ -44,8 +44,8 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./front:/opt/app-front
-    working_dir: /opt/app-front
+      - ./front:/opt/front
+    working_dir: /opt/front
     command: 'npm start'
 
 volumes:
