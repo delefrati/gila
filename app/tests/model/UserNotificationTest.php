@@ -9,14 +9,20 @@ final class UserNotificationTest extends Db_base
     private $user;
     private $joins;
 
+    static public function setUpBeforeClass() : void
+    {
+        resetDatabase('user');
+        resetDatabase('notification');
+        parent::setUpBeforeClass();
+    }
+
     public function setUp(): void {
-        $db = $this->mockDb();
-        $this->user = new UserNotification($db);
+        parent::setUp();
+        $this->user = new UserNotification($this->db);
     }
     public function testSearch_good(): void
     {
         $expected = [
-
             [
                 'id' => '1',
                 'name' => 'Lorem',
@@ -24,9 +30,8 @@ final class UserNotificationTest extends Db_base
                 'phone_nr' => '+551234567',
                 "user" => "1",
                 "category" => "1",
-                "by_sms" => "1",
-                "by_email" => null,
-                "by_notification" => null,
+                "type" => "sms",
+                "status" => 'WAIT',
             ],
             [
                 'id' => '2',
@@ -35,9 +40,8 @@ final class UserNotificationTest extends Db_base
                 'phone_nr' => '+551234567',
                 "user" => "1",
                 "category" => "2",
-                "by_sms" => "1",
-                "by_email" => "1",
-                "by_notification" => null,
+                "type" => "sms",
+                "status" => 'WAIT',
             ],
             [
                 'id' => '3',
@@ -46,9 +50,28 @@ final class UserNotificationTest extends Db_base
                 'phone_nr' => '+551234567',
                 "user" => "1",
                 "category" => "3",
-                "by_sms" => "1",
-                "by_email" => "1",
-                "by_notification" => "1",
+                "type" => "phone",
+                "status" => 'WAIT',
+            ],
+            [
+                'id' => '7',
+                'name' => 'Lorem',
+                'email' => 'lorem@lipsum.com',
+                'phone_nr' => '+551234567',
+                "user" => "1",
+                "category" => "1",
+                "type" => "email",
+                "status" => 'WAIT',
+            ],
+            [
+                'id' => '8',
+                'name' => 'Lorem',
+                'email' => 'lorem@lipsum.com',
+                'phone_nr' => '+551234567',
+                "user" => "1",
+                "category" => "2",
+                "type" => "phone",
+                "status" => 'WAIT',
             ],
         ];
         $this->assertEquals($expected, $this->user->search(['user.id'=>1], $this->joins["left"]));
@@ -57,6 +80,7 @@ final class UserNotificationTest extends Db_base
     public function testGetAll_good(): void
     {
         $expected = [
+
             [
                 'id' => '1',
                 'name' => 'Lorem',
@@ -64,9 +88,8 @@ final class UserNotificationTest extends Db_base
                 'phone_nr' => '+551234567',
                 "user" => "1",
                 "category" => "1",
-                "by_sms" => "1",
-                "by_email" => null,
-                "by_notification" => null,
+                "type" => "sms",
+                "status" => 'WAIT',
             ],
             [
                 'id' => '2',
@@ -75,9 +98,8 @@ final class UserNotificationTest extends Db_base
                 'phone_nr' => '+551234567',
                 "user" => "1",
                 "category" => "2",
-                "by_sms" => "1",
-                "by_email" => "1",
-                "by_notification" => null,
+                "type" => "sms",
+                "status" => 'WAIT',
             ],
             [
                 'id' => '3',
@@ -86,9 +108,8 @@ final class UserNotificationTest extends Db_base
                 'phone_nr' => '+551234567',
                 "user" => "1",
                 "category" => "3",
-                "by_sms" => "1",
-                "by_email" => "1",
-                "by_notification" => "1",
+                "type" => "phone",
+                "status" => 'WAIT',
             ],
             [
                 'id' => '4',
@@ -97,9 +118,8 @@ final class UserNotificationTest extends Db_base
                 'phone_nr' => '+123456789',
                 "user" => "2",
                 "category" => "2",
-                "by_sms" => null,
-                "by_email" => "1",
-                "by_notification" => null,
+                "type" => "email",
+                "status" => 'WAIT',
             ],
             [
                 'id' => '5',
@@ -108,73 +128,32 @@ final class UserNotificationTest extends Db_base
                 'phone_nr' => '+123456789',
                 "user" => "2",
                 "category" => "3",
-                "by_sms" => null,
-                "by_email" => null,
-                "by_notification" => "1",
+                "type" => "sms",
+                "status" => 'WAIT',
             ],
-        ];
-        $this->assertEquals($this->user->getAll($this->joins["left"]), $expected);
-    }
-    public function testGetAll_INNER_good(): void
-    {
-        $expected = [
             [
-                'id' => '1',
+                'id' => '7',
                 'name' => 'Lorem',
                 'email' => 'lorem@lipsum.com',
                 'phone_nr' => '+551234567',
                 "user" => "1",
                 "category" => "1",
-                "by_sms" => "1",
-                "by_email" => null,
-                "by_notification" => null,
+                "type" => "email",
+                "status" => 'WAIT',
             ],
             [
-                'id' => '2',
+                'id' => '8',
                 'name' => 'Lorem',
                 'email' => 'lorem@lipsum.com',
                 'phone_nr' => '+551234567',
                 "user" => "1",
                 "category" => "2",
-                "by_sms" => "1",
-                "by_email" => "1",
-                "by_notification" => null,
-            ],
-            [
-                'id' => '3',
-                'name' => 'Lorem',
-                'email' => 'lorem@lipsum.com',
-                'phone_nr' => '+551234567',
-                "user" => "1",
-                "category" => "3",
-                "by_sms" => "1",
-                "by_email" => "1",
-                "by_notification" => "1",
-            ],
-            [
-                'id' => '4',
-                'name' => 'Ipsum',
-                'email' => 'ipsum@lipsum.com',
-                'phone_nr' => '+123456789',
-                "user" => "2",
-                "category" => "2",
-                "by_sms" => null,
-                "by_email" => "1",
-                "by_notification" => null,
-            ],
-            [
-                'id' => '5',
-                'name' => 'Ipsum',
-                'email' => 'ipsum@lipsum.com',
-                'phone_nr' => '+123456789',
-                "user" => "2",
-                "category" => "3",
-                "by_sms" => null,
-                "by_email" => null,
-                "by_notification" => "1",
+                "type" => "phone",
+                "status" => 'WAIT',
             ],
         ];
-        $this->assertEquals($this->user->getAll($this->joins["inner"]), $expected);
+        $this->assertEquals($expected, $this->user->getAll());
     }
+
 
 }

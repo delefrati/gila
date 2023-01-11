@@ -8,19 +8,25 @@ final class CategoryTest extends Db_base
 {
     private $category;
 
+    static public function setUpBeforeClass() : void
+    {
+        resetDatabase('category');
+        parent::setUpBeforeClass();
+    }
+
     public function setUp(): void {
-        $db = $this->mockDb();
-        $this->category = new Category($db);
+        parent::setUp();
+        $this->category = new Category($this->db);
     }
     public function testGet_bad(): void
     {
-        $this->assertEquals($this->category->get(0), []);
+        $this->assertEquals([], $this->category->get(0));
     }
 
     public function testGet_good(): void
     {
         $expected = ["id"=>1, "name"=>"Sports"];
-        $this->assertEquals($this->category->get(1), $expected);
+        $this->assertEquals($expected, $this->category->get(1));
     }
 
     public function testGetAll_good(): void
@@ -39,7 +45,7 @@ final class CategoryTest extends Db_base
                 'name' => 'Movies',
             ]
         ];
-        $this->assertEquals($this->category->getAll(), $expected);
+        $this->assertEquals($expected, $this->category->getAll());
     }
 
     public function testAdd_good(): void

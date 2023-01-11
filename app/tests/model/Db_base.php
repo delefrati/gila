@@ -8,12 +8,23 @@ abstract class Db_base extends TestCase
 {
     protected $db;
 
-    protected function mockDb() : Db
+    static public function setUpBeforeClass() : void
+    {
+        // resetDatabase('fixture_data');
+        parent::setUpBeforeClass();
+    }
+
+    public function setUp() : void
     {
         $dsn = sprintf('mysql:host=%s;dbname=%s', $GLOBALS['DB_HOST'], $GLOBALS['DB_DATABASE']);
-        $db = new Db($dsn, $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWORD']);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $db;
+        $this->db = new Db($dsn, $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWORD']);
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
+
+    public function tearDown() : void
+    {
+        unset($this->db);
+    }
+
 
 }

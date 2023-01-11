@@ -7,15 +7,19 @@ final class NotificationTest extends Db_base
 {
     private $notification;
 
-    public function setUp(): void {
-        $db = $this->mockDb();
-        $this->notification = new Notification($db);
-    }
-
     static public function setUpBeforeClass() : void
     {
-        resetDatabase();
+        resetDatabase('user');
+        resetDatabase('category');
+        resetDatabase('notification');
+        parent::setUpBeforeClass();
     }
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->notification = new Notification($this->db);
+    }
+
     public function testGet_bad(): void
     {
         $this->assertEquals($this->notification->get(0), []);
@@ -23,51 +27,66 @@ final class NotificationTest extends Db_base
 
     public function testGet_good(): void
     {
-        $expected = ["id"=>1, "user"=>1, "category"=>1, "by_sms"=>true, "by_email"=>false, "by_notification"=>false];
+        $expected = [
+            "id" => 1,
+            "user" => 1,
+            "category" => 1,
+            "type" => 'sms',
+            'status' => 'WAIT'
+        ];
         $this->assertEquals($this->notification->get(1), $expected);
     }
     public function testGetAll_good(): void
     {
         $expected = [
             [
-                'id' => 1,
-                'user' => 1,
-                'category' => 1,
-                'by_sms' => true,
-                'by_email' => false,
-                'by_notification' => false,
+                "id" => 1,
+                "user" => 1,
+                "category" => 1,
+                "type" => 'sms',
+                'status' => 'WAIT'
             ],
             [
                 'id' => 2,
                 'user' => 1,
                 'category' => 2,
-                'by_sms' => true,
-                'by_email' => true,
-                'by_notification' => false,
+                "type" => 'sms',
+                'status' => 'WAIT'
             ],
             [
                 'id' => 3,
                 'user' => 1,
                 'category' => 3,
-                'by_sms' => true,
-                'by_email' => true,
-                'by_notification' => true,
+                "type" => 'phone',
+                'status' => 'WAIT'
             ],
             [
                 'id' => 4,
                 'user' => 2,
                 'category' => 2,
-                'by_sms' => false,
-                'by_email' => true,
-                'by_notification' => false,
+                "type" => 'email',
+                'status' => 'WAIT'
             ],
             [
                 'id' => 5,
                 'user' => 2,
                 'category' => 3,
-                'by_sms' => false,
-                'by_email' => false,
-                'by_notification' => true,
+                "type" => 'sms',
+                'status' => 'WAIT'
+            ],
+            [
+                'id' => 7,
+                'user' => 1,
+                'category' => 1,
+                "type" => 'email',
+                'status' => 'WAIT'
+            ],
+            [
+                'id' => 8,
+                'user' => 1,
+                'category' => 2,
+                "type" => 'phone',
+                'status' => 'WAIT'
             ]
         ];
         $this->assertEquals($this->notification->getAll(), $expected);
@@ -75,14 +94,13 @@ final class NotificationTest extends Db_base
 
     public function testAdd_good(): void
     {
-        $id = $this->notification->add(["user" => "3", "category" => "2", "by_sms" => "1", "by_email"=>true, "by_notification"=>0]);
+        $id = $this->notification->add(["user" => "3", "category" => "2", "type" => "sms", "status" => "WAIT"]);
         $this->assertSame(1, $id);
 
-
-        $id = $this->notification->add(["user" => "3", "category" => "1", "by_sms" => true]);
+        $id = $this->notification->add(["user" => "3", "category" => "1", "type" => "phone", "status" => "WAIT"]);
         $this->assertSame(1, $id);
 
-        $id = $this->notification->add(["user" => "3", "category" => "3"]);
+        $id = $this->notification->add(["user" => "3", "category" => "3", "type" => "phone", "status" => "WAIT"]);
         $this->assertSame(1, $id);
     }
 
@@ -114,7 +132,7 @@ final class NotificationTest extends Db_base
 
     public function testDelete_bad(): void
     {
-        $deleted = $this->notification->delete(10);
+        $deleted = $this->notification->delete(1);
         $this->assertFalse($deleted);
     }
 

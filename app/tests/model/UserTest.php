@@ -7,9 +7,14 @@ final class UserTest extends Db_base
 {
     private $user;
 
+    static public function setUpBeforeClass() : void
+    {
+        resetDatabase('user');
+        parent::setUpBeforeClass();
+    }
     public function setUp(): void {
-        $db = $this->mockDb();
-        $this->user = new User($db);
+        parent::setUp();
+        $this->user = new User($this->db);
     }
     public function testGet_bad(): void
     {

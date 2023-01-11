@@ -17,9 +17,7 @@
   </coverage>
   <testsuites>
     <testsuite name="model">
-      <file>tests/model/UserTest.php</file>
-      <file>tests/model/CategoryTest.php</file>
-      <file>tests/model/NotificationTest.php</file>
+      <directory suffix="Test.php">./tests/model/</directory>
     </testsuite>
   </testsuites>
 </phpunit>

@@ -3,13 +3,16 @@ version: "2.1"
 services:
 
   db:
+    build:
+      context: .
+      dockerfile: mysql.Dockerfile
     image: mysql:5.7
     ports:
       - ':3306:3306'
     expose:
       - '3306'
     volumes:
-      - my-db:/var/lib/mysql
+      - ./mysql-dump:/docker-entrypoint-initdb.d
     networks:
       - common_network
     healthcheck:
@@ -34,7 +37,7 @@ services:
         condition: service_healthy
 
 volumes:
-  my-db:
+  mysql-dump:
 
 networks:
   common_network:
