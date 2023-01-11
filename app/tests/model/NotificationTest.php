@@ -12,6 +12,7 @@ final class NotificationTest extends Db_base
         resetDatabase('user');
         resetDatabase('category');
         resetDatabase('notification');
+        resetDatabase('notification_type');
         parent::setUpBeforeClass();
     }
     public function setUp(): void

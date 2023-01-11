@@ -16,7 +16,7 @@ class Queue extends \Gila\model\DbObjectEditable
 	 */
 	public function getFields(): array
 	{
-        return ["name", "email", "phone_nr", "category", "template", "notification_type", "data_queued"];
+        return ["name", "email", "phone_nr", "category", "template", "notification_type", "data_queued", "qstatus"];
 	}
 
 }
