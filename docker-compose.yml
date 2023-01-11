@@ -35,6 +35,18 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  front:
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: front.Dockerfile
+    image: node:12
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./front:/opt/app-front
+    working_dir: /opt/app-front
+    command: 'npm start'
 
 volumes:
   mysql-dump:
