@@ -28,9 +28,9 @@ abstract class DbObject implements DbObjectInterface
         }
         return [];
     }
-    public function getFirst() : array
+    public function getFirst(array $search = []) : array
     {
-        $rs = $this->search([]);
+        $rs = $this->search($search);
         if (is_array($rs) && count($rs) > 0) {
             return current($rs);
         }

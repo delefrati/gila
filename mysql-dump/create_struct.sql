@@ -39,8 +39,10 @@ CREATE TABLE IF NOT EXISTS `category` (
 CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `log` longtext NOT NULL,
+  `date` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
