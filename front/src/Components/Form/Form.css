@@ -10,6 +10,7 @@
 }
 .form textarea {
     width: 271px;
+    height: 200px;
     padding: 8px;
     font-size: 16px;
     margin: 10px;

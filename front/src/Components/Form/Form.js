@@ -40,16 +40,18 @@ function Form() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className='form'>
-
-      <label>
-          <select id="category">
-            <optgroup label="Category">
-              {getCategories()}
-            </optgroup>
-          </select>
-      </label>
-      <textarea id="message" placeholder="Message - you can use {name} and {channel}"></textarea>
+    <form onSubmit={handleSubmit} className='container'>
+      <h1>Form</h1>
+      <div className="form">
+        <label>
+            <select id="category">
+              <optgroup label="Category">
+                {getCategories()}
+              </optgroup>
+            </select>
+        </label>
+        <textarea id="message" placeholder="Message - you can use {name} and {channel}"></textarea>
+      </div>
       <button id="bt_send">Send Message!</button>
     </form>
   )

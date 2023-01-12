@@ -63,6 +63,7 @@ function Subscription() {
 
   return (
     <form onSubmit={handleSubmit} className='form'>
+      <h1>Subscription</h1>
       <label>
           <select key="user" id="user">
             <optgroup label="User">

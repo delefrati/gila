@@ -65,5 +65,13 @@ $router->post(
     }
 );
 
+$router->get(
+    '/logs/',
+    function () use ($db) {
+        $controller = new \Gila\controller\api\LogController($db);
+        $controller->getAll();
+    }
+);
+
 // Run it!
 $router->run();

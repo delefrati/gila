@@ -3,13 +3,13 @@
 }
 
 .form select {
-    width: 271px;
+    width: 290px;
     padding: 8px;
     font-size: 16px;
     margin: 10px;
 }
 
-.form button {
+#bt_subscribe, #bt_send {
     padding: 8px;
     margin: 10px;
     font-size: 16px;
