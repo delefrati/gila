@@ -62,7 +62,6 @@ abstract class DbObject implements DbObjectInterface
             $str_limit = sprintf(' LIMIT %d', $limit);
         }
         $str = sprintf('SELECT %s FROM %s WHERE 1=1%s%s', $str_fields, $this->getTables(), $str_where, $str_limit);
-
         $stt = $this->db->prepare($str, [\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY]);
         $stt->execute($values);
 

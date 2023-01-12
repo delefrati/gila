@@ -14,19 +14,21 @@ class QueueExecutor {
 	public function generateQueue() : bool
 	{
         $this->log('Generating new queue');
-		return $this->queue->exec('CALL `gila`.`sp_fill_queue`()', []);
+        $cmd = sprintf('CALL `gila`.`sp_fill_queue`()');
+		return $this->queue->exec($cmd, []);
 	}
 
-    public function run(int $limit=10000) : int
+    public function run(int $category, string $message, int $limit=10000) : int
     {
         $total_executed = 0;
+
         for ($i=0; $i<=$limit; $i++) {
-            $rs = $this->queue->getFirst(['qstatus'=>'WAIT']);
+            $rs = $this->queue->getFirst(['category_id' => $category]);
             if (!is_array($rs) || count($rs) <= 0) {
                 break;
             }
             $id = $rs['id'];
-            if ($this->send($rs['notification_type'], $rs['category'], $rs['name'], $rs['email'], $rs['phone_nr'], $rs['template'])) {
+            if ($this->send($rs['notification_type'], $rs['category'], $rs['name'], $rs['email'], $rs['phone_nr'], $message)) {
                 $this->queue->delete($id);
                 $total_executed++;
             } else {

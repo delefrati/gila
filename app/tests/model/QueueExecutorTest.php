@@ -20,7 +20,6 @@ final class QueueExecutorTest extends Db_base
         resetDatabase('user');
         resetDatabase('category');
         resetDatabase('queue');
-        resetDatabase('message');
         resetDatabase('log');
 
         $this->queue = new Queue($this->db);
@@ -33,34 +32,35 @@ final class QueueExecutorTest extends Db_base
     {
         $this->assertTrue($this->queue_exec->generateQueue());
         $all = $this->queue->getAll();
-        $this->assertEquals(5, count($all));
+        $this->assertEquals(7, count($all));
     }
 
-    /**
-     * @depends testGenerateQueue_good
-     */
     public function testRun_good() : void
     {
-        $all = $this->queue->getAll();
-        $this->assertEquals(5, count($all));
 
-        $this->assertEquals(5, $this->queue_exec->run());
+        $this->assertTrue($this->queue_exec->generateQueue());
+        $all = $this->queue->getAll();
+        $this->assertEquals(7, count($all));
+
+        $this->assertEquals(2, $this->queue_exec->run(1, 'Message'));
+        $this->assertEquals(0, $this->queue_exec->run(1, 'Message'));
+        $this->assertEquals(2, $this->queue_exec->run(3, 'Message'));
         $logs = $this->log->getAll();
         $clear_logs = [];
         foreach ($logs as $log) {
             $clear_logs[] = $log['log'];
         }
         $logs_expected = [
-          'Message sent via {sms} for {Lorem} - Category: {Sports}',
-          'Message sent via {sms} for {Lorem} - Category: {Finance}',
-          'Message sent via {email} for {Lorem} - Category: {Sports}',
-          'Message sent via {phone} for {Lorem} - Category: {Finance}',
-          'Message sent via {email} for {Ipsum} - Category: {Finance}',
+            'Generating new queue',
+            'Message sent via {sms} for {Lorem} - Category: {Sports}',
+            'Message sent via {email} for {Lorem} - Category: {Sports}',
+            'Message sent via {phone} for {Lorem} - Category: {Movies}',
+            'Message sent via {sms} for {Ipsum} - Category: {Movies}',
         ];
         sort($clear_logs);
         sort($logs_expected);
         $this->assertEquals($logs_expected, $clear_logs);
         $all = $this->queue->getAll();
-        $this->assertEquals(0, count($all));
+        $this->assertEquals(3, count($all));
     }
 }

@@ -12,7 +12,6 @@ final class QueueTest extends Db_base
         resetDatabase('user');
         resetDatabase('category');
         resetDatabase('queue');
-        resetDatabase('message');
         parent::setUpBeforeClass();
     }
     public function setUp(): void
@@ -29,10 +28,10 @@ final class QueueTest extends Db_base
             "email" => "lorem@lipsum.com",
             "phone_nr" => "+551234567",
             "category" => "Sports",
-            "template" => "This is a message for Sports.",
             "notification_type" => "sms",
             "date_queued" => date("Y-m-d") . " 00:00:00",
             "qstatus" => "WAIT",
+            "category_id" => "1",
         ];
 
         $this->assertEquals($expected, $this->queue->get(1));
@@ -46,10 +45,10 @@ final class QueueTest extends Db_base
                 "email" => "lorem@lipsum.com",
                 "phone_nr" => "+551234567",
                 "category" => "Sports",
-                "template" => "This is a message for Sports.",
                 "notification_type" => "sms",
                 "date_queued" => date("Y-m-d") . " 00:00:00",
                 "qstatus" => "WAIT",
+                "category_id" => "1",
             ],
             [
                 "id" => "2",
@@ -57,10 +56,10 @@ final class QueueTest extends Db_base
                 "email" => "lorem@lipsum.com",
                 "phone_nr" => "+551234567",
                 "category" => "Finance",
-                "template" => "This is a message for Finance.",
                 "notification_type" => "sms",
                 "date_queued" => date("Y-m-d") . " 00:00:00",
                 "qstatus" => "WAIT",
+                "category_id" => "2",
             ],
             [
                 "id" => "3",
@@ -68,10 +67,10 @@ final class QueueTest extends Db_base
                 "email" => "lorem@lipsum.com",
                 "phone_nr" => "+551234567",
                 "category" => "Sports",
-                "template" => "This is a message for Sports.",
                 "notification_type" => "email",
                 "date_queued" => date("Y-m-d") . " 00:00:00",
                 "qstatus" => "WAIT",
+                "category_id" => "1",
             ],
             [
                 "id" => "4",
@@ -79,10 +78,10 @@ final class QueueTest extends Db_base
                 "email" => "lorem@lipsum.com",
                 "phone_nr" => "+551234567",
                 "category" => "Finance",
-                "template" => "This is a message for Finance.",
                 "notification_type" => "phone",
                 "date_queued" => date("Y-m-d") . " 00:00:00",
                 "qstatus" => "WAIT",
+                "category_id" => "2",
             ],
             [
                 "id" => "5",
@@ -90,10 +89,10 @@ final class QueueTest extends Db_base
                 "email" => "ipsum@lipsum.com",
                 "phone_nr" => "+123456789",
                 "category" => "Finance",
-                "template" => "This is a message for Finance.",
                 "notification_type" => "email",
                 "date_queued" => date("Y-m-d") . " 00:00:00",
                 "qstatus" => "WAIT",
+                "category_id" => "2",
             ]
         ];
         $this->assertEquals($expected, $this->queue->getAll());

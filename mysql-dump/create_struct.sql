@@ -46,23 +46,6 @@ CREATE TABLE IF NOT EXISTS `log` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `message`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE IF NOT EXISTS `message` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `category` int(11) NOT NULL,
-  `template` text NOT NULL,
-  `date` date NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_id_category_message_idx` (`category`),
-  CONSTRAINT `fk_id_category_message` FOREIGN KEY (`category`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `notification`
 --
 
@@ -107,8 +90,8 @@ CREATE TABLE IF NOT EXISTS `queue` (
   `name` varchar(45) NOT NULL,
   `email` varchar(45) DEFAULT NULL,
   `phone_nr` varchar(45) DEFAULT NULL,
-  `category` text,
-  `template` text,
+  `category_id` int(11) DEFAULT NULL,
+  `category` varchar(45) DEFAULT NULL,
   `notification_type` varchar(45) NOT NULL,
   `date_queued` datetime DEFAULT NULL,
   `qstatus` varchar(45) NOT NULL DEFAULT 'WAIT',
@@ -146,17 +129,15 @@ DELIMITER ;;
 CREATE DEFINER=`gila`@`%` PROCEDURE `sp_fill_queue`()
 BEGIN
 TRUNCATE TABLE queue;
-INSERT INTO queue (name, email, phone_nr, category, notification_type, template, date_queued, qstatus)
-SELECT user.name, user.email, user.phone_nr, category.name, notification.type, message.template, NOW(), 'WAIT' FROM (
+INSERT INTO queue (name, email, phone_nr, category_id, category, notification_type, date_queued, qstatus)
+SELECT user.name, user.email, user.phone_nr, category.id, category.name, notification.type, NOW(), 'WAIT' FROM (
   user INNER JOIN (
     notification INNER JOIN (
       category
     ) ON category.id=notification.category
   ) ON user.id=notification.user
-)
-INNER JOIN message ON message.category=category.id
-WHERE message.date=CURDATE();
-END ;;
+);
+END;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
